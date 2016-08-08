@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax</title>
+	<style>
+	body{
+		margin: 0;
+		padding: 0;
+	}
+		#preloader{
+			top: 0;
+			left: 0;
+			height: 100%;
+			width: 100%;
+			background-color: black;
+			color: #fff;
+			position: fixed;
+			z-index: 99;
+		}
+	</style>
+</head>
+<body>
+
+<div id="preloader">cargando...</div>
+	<ul>
+		<li> <a href="?section=home" class="ajax"> Home </a> </li>
+		<li> <a href="?section=about" class="ajax"> About </a> </li>
+		<li> <a href="?section=contact" class="ajax"> Contact </a> </li>
+	</ul>
+	<div id="yield">
+		<!-- render ajax -->
+	</div>
+	<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+	<script>
+	// xhttp.onreadystatechange = function() {
+	//   if (xhttp.readyState == 4 && xhttp.status == 200) {
+	//     document.getElementById("demo").innerHTML = xhttp.responseText;
+	//   }
+	// };
+	// xhttp.open("GET", "ajax_info.txt", true);
+	// xhttp.send();
+	var currentSection = window.location.search;
+	currentSection.replace('?section=', '');
+	if (currentSection != '') {
+		openSection(currentSection);
+	} else {
+		openSection('home');
+	}
+
+	jQuery(document).ready(function($) {
+		$(document).on('click', '.ajax', function(event) {
+			event.preventDefault();
+			var goToSection = $(this).attr('href').replace('?section=', '');
+			openSection(goToSection);		
+		});
+	});
+
+
+	function openSection(section){
+		console.log('Open Section Triggered');
+		window.history.pushState("object or string", section, "?section="+section);
+		$("#preloader").fadeIn(function(){
+			$("#yield").load('sections/' + section + '.html', function() {
+				$("#preloader").fadeOut();
+			});
+		});		
+		// $.ajax({
+		// 	url: 'sections/' + section + '.html',
+		// })
+		// .done(function(response) {
+		// 	$('#yield').html(response);
+		// });
+	}
+
+	</script>
+
+</body>
+</html>
